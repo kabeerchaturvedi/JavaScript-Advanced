@@ -1,0 +1,33 @@
+//returns a promise. The returned promise fulfills or rejects as soon as one of input promises fulfills or rejects.
+//returned promise with value of input promise or rejects with reason.
+
+
+const race = function (promisesArray) {
+  return new Promise((resolve, reject) => {
+    promisesArray.forEach((promise) => {
+      Promise.resolve(promise)
+        //resolve when any of the input promise resolves
+        .then(resolve, reject)
+        //reject, when any of the input promise rejects
+        .catch(reject);
+    });
+  });
+};
+
+const test1 = new Promise(function (resolve, reject) {
+  setTimeout(reject, 500, "one");
+});
+const test2 = new Promise(function (resolve, reject) {
+  setTimeout(reject, 600, "two");
+});
+const test3 = new Promise(function (resolve, reject) {
+  setTimeout(reject, 200, "three");
+});
+
+race([test1, test2, test3])
+  .then(function (value) {
+    console.log(value);
+  })
+  .catch(function (err) {
+    console.log(err);
+  });
