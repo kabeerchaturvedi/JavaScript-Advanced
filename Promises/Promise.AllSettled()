@@ -1,0 +1,14 @@
+
+/**
+ * @param {Array<any>} promises - notice that input might contains non-promises
+ * @return {Promise<Array<{status: 'fulfilled', value: any} | {status: 'rejected', reason: any}>>}
+ */
+function allSettled(promises) {
+  const mappedPromises = promises.map((p) => Promise.resolve(p)
+    .then(
+      val => ({ status: 'fulfilled', value: val }),
+      err => ({ status: 'rejected', reason: err })
+    ));
+  return Promise.all(mappedPromises);
+}
+
